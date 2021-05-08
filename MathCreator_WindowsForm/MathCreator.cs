@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* MathCreator.cs
+ * 
+ * To generate randomized math equations with four math operations (plus, minus, multiply and divide)
+ * 
+ * Author: Huy Pham
+ * 
+ * Created on May 7th 2021
+ * Finished on May 8th 2021
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace MathCreator_WindowsForm
 {
@@ -21,7 +31,8 @@ namespace MathCreator_WindowsForm
 		private void btnRun_Click(object sender, EventArgs e)
 		{
 			// Validations
-			rtxtDisplay.Text = "";
+			rtxtDisplay.Clear();
+			rtxtDisplay.ForeColor = System.Drawing.Color.Red;
 			Regex numberPattern = new Regex(@"^\d+$");
 			if (!numberPattern.IsMatch(txtNumberOfEquations.Text))
 			{
@@ -37,7 +48,7 @@ namespace MathCreator_WindowsForm
 			}
 			else
 			{
-				Regex ratioPattern = new Regex(@"^(\d[:]){3}\d$");
+				Regex ratioPattern = new Regex(@"^(\d+[:]){3}\d+$");
 				if (!ratioPattern.IsMatch(txtRatio.Text))
 				{
 					txtRatio.Focus();
@@ -50,19 +61,70 @@ namespace MathCreator_WindowsForm
 						rtxtDisplay.Text = "Tỉ lệ không đúng (VD 1:1:1:1)";
 					}
 				}
+				else
+				{
+					string[] ratio = txtRatio.Text.Split(':');
+					// Simplify the ratio
+					uint gcd = GetGCD(GetGCD(uint.Parse(ratio[0]), uint.Parse(ratio[1])), GetGCD(uint.Parse(ratio[2]), uint.Parse(ratio[3])));
+					for (int i = 0; i < 4; i++)
+					{
+						ratio[i] = (uint.Parse(ratio[i]) / gcd).ToString();
+					}
+					int sum = 0;
+					txtRatio.Text = ratio[0] + ':' + ratio[1] + ':' + ratio[2] + ':' + ratio[3];
+					foreach (string digit in ratio)
+					{
+						sum = sum + int.Parse(digit);
+					}
+					if (sum > int.Parse(txtNumberOfEquations.Text))
+					{
+						txtRatio.Focus();
+						if (rbtnEnglish.Checked)
+						{
+							rtxtDisplay.Text = "Ratio is not in appropriate (Sum of ratio must be less than the number of equations)";
+						}
+						else
+						{
+							rtxtDisplay.Text = "Tỉ lệ không phù hợp (Tổng tỉ lệ phải nhỏ hơn số phép toán.)";
+						}
+					}
+				}
 			}
 
 			// Main code
 			if (rtxtDisplay.Text == "")
 			{
-				// Deactivate input fields 
+				// Deactivate input fields
+				rtxtDisplay.Clear();
+				rtxtDisplay.ForeColor = SystemColors.ControlText;
+				if (rbtnEnglish.Checked)
+				{
+					rtxtDisplay.Text = "Running...";
+				}
+				if (rbtnVietnamese.Checked)
+				{
+					rtxtDisplay.Text = "Đang xử lí...";
+				}
 				grbLanguages.Enabled = false;
 				grbPreferences.Enabled = false;
 				btnRun.Enabled = false;
 				btnClose.Enabled = false;
 				progressBar.Visible = true;
 
+				progressBar.Value = 20;
 				int numberOfEquations = int.Parse(txtNumberOfEquations.Text);
+				int estimatedTime = numberOfEquations / 1000 + 10;
+				if (rbtnEnglish.Checked)
+				{
+					rtxtDisplay.Text = "Running...\nPlease wait for a moment. \nEstimated time: " + estimatedTime + " seconds";
+				}
+				if (rbtnVietnamese.Checked)
+				{
+					rtxtDisplay.Text = "Đang xử lí...\nVui lòng đợi trong giây lát.\nDự kiến: " + estimatedTime + " giây.";
+				}
+				Thread.Sleep(1000);
+
+				/* Dealing with ratio */
 				int ratioOfAddition, ratioOfSubtraction, ratioOfMultiplication, ratioOfDivision;
 				string[] ratio = txtRatio.Text.Split(':');
 				ratioOfAddition = int.Parse(ratio[0]);
@@ -71,19 +133,31 @@ namespace MathCreator_WindowsForm
 				ratioOfDivision = int.Parse(ratio[3]);
 				int totalRatio = ratioOfAddition + ratioOfSubtraction + ratioOfMultiplication + ratioOfDivision;
 
-				double numberOfAdditions, numberOfSubtractions, numberOfMultiplications, numberOfDivisions;
-				numberOfAdditions = numberOfEquations / totalRatio * ratioOfAddition;
-				numberOfAdditions = Math.Round(numberOfAdditions);
-				numberOfSubtractions = numberOfEquations / totalRatio * ratioOfSubtraction;
-				numberOfSubtractions = Math.Round(numberOfSubtractions);
-				numberOfMultiplications = numberOfEquations / totalRatio * ratioOfMultiplication;
-				numberOfMultiplications = Math.Round(numberOfMultiplications);
-				numberOfDivisions = numberOfEquations / totalRatio * ratioOfDivision;
-				numberOfDivisions = Math.Round(numberOfDivisions);
+				/* CALCULATE HOW MANY ADDS, SUBTRACTIONS, ETC. WE NEED */
+				int numberOfAdditions, numberOfSubtractions, numberOfMultiplications, numberOfDivisions;
+				int portion = numberOfEquations / totalRatio;
+				numberOfAdditions = portion * ratioOfAddition;
+				numberOfSubtractions = portion * ratioOfSubtraction;
+				numberOfMultiplications = portion * ratioOfMultiplication;
+				numberOfDivisions = portion * ratioOfDivision;
+				int remainder = numberOfEquations % totalRatio;
+				if (remainder > 0)
+				{
+					if (remainder % 2 == 0)
+					{
+						numberOfAdditions += remainder / 2;
+						numberOfSubtractions += remainder / 2;
+					}
+					else
+					{
+						numberOfAdditions += remainder / 2 + 1;
+						numberOfSubtractions += remainder / 2;
+					}
+				}
+
+				progressBar.Value = 40;
 
 				// Generate equations
-				int operations = 0;
-				int i = 0;
 				int a = 0; // first number
 				int b = 0; // second number
 				int minValue, maxValue;
@@ -96,77 +170,106 @@ namespace MathCreator_WindowsForm
 				{
 					minValue = 1;
 				}
-				while (i <= numberOfEquations)
+
+				progressBar.Value = 50;
+
+				for (int i = 0; i < numberOfAdditions; i++)
 				{
 					var rand = new Random();
-					operations = rand.Next(0, 5);
-					i++;
-					Thread.Sleep(100);
-					switch (operations)
+					Thread.Sleep(1);
+					maxValue = 9;
+					equationList.Add(rand.Next(minValue, maxValue).ToString() + " + " + rand.Next(minValue, maxValue).ToString() + " =");
+				}
+				for (int i = 0; i < numberOfSubtractions; i++)
+				{
+					var rand = new Random();
+					do
 					{
-						case 1: // Add
-							{
-								maxValue = 9;
-								equationList.Add(rand.Next(minValue, maxValue).ToString() + " + " + rand.Next(minValue, maxValue).ToString() + " =");
-								break;
-							}
-						case 2: // Subtract
-							{
-								do
-								{
-									maxValue = 10;
-									a = rand.Next(minValue, maxValue);
-									b = rand.Next(minValue, maxValue);
-								} while (a <= b);
-								equationList.Add(a.ToString() + " - " + b.ToString() + " =");
-								break;
-							}
-						case 3: // Multiplication
-							{
-								maxValue = 9;
-								equationList.Add(rand.Next(minValue, maxValue).ToString() + " x " + rand.Next(minValue, maxValue).ToString() + " =");
-								break;
-							}
-						case 4: // Division
-							{
-								minValue = 1;
-								maxValue = 9;
-								a = rand.Next(minValue, maxValue);
-								b = rand.Next(minValue, maxValue);
-								int product = a * b;
-								if (DateTime.Now.Second % 2 == 0)
-								{ 
-									equationList.Add(product.ToString() + " : " + a.ToString() + " ="); 
-								}
-								else
-								{
-									equationList.Add(product.ToString() + " : " + b.ToString() + " =");
-								}
-								break;
-							}
-						default:
-							i--;
-							break;
+						maxValue = 10;
+						a = rand.Next(minValue, maxValue);
+						Thread.Sleep(1);
+						b = rand.Next(minValue, maxValue);
+					} while (a <= b);
+					equationList.Add(a.ToString() + " - " + b.ToString() + " =");
+				}
+				for (int i = 0; i < numberOfMultiplications; i++)
+				{
+					var rand = new Random();
+					Thread.Sleep(1);
+					maxValue = 9;
+					equationList.Add(rand.Next(minValue, maxValue).ToString() + " x " + rand.Next(minValue, maxValue).ToString() + " =");
+				}
+				for (int i = 0; i < numberOfDivisions; i++)
+				{
+					var rand = new Random();
+					minValue = 2;
+					maxValue = 9;
+					a = rand.Next(minValue, maxValue);
+					Thread.Sleep(1);
+					b = rand.Next(minValue, maxValue);
+					int product = a * b;
+					if (DateTime.Now.Second % 2 == 0)
+					{
+						equationList.Add(product.ToString() + " : " + a.ToString() + " =");
+					}
+					else
+					{
+						equationList.Add(product.ToString() + " : " + b.ToString() + " =");
 					}
 				}
-				try 
+
+				progressBar.Value = 80;
+
+				// shuffle the list
+				equationList = equationList.OrderBy(x => Guid.NewGuid()).ToList();
+				try
 				{
-					FileIO.WriteToFile(equationList);
+					FileIO.WriteToTextFile(equationList);
+					FileIO.WriteToWordDocument(equationList);
 				}
 				catch (Exception ex)
 				{
-					rtxtDisplay.Text = "Error in writing to file: "+ex.Message;
+					rtxtDisplay.Text = "Error in writing to file: " + ex.Message;
 				}
-				if (rtxtDisplay.Text == "")
+
+				progressBar.Value = 100;
+
+				if (!rtxtDisplay.Text.StartsWith("Error"))
 				{
-					rtxtDisplay.Text = "Finished.";
-					grbLanguages.Enabled = true;
-					grbPreferences.Enabled = true;
-					btnRun.Enabled = true;
-					btnClose.Enabled = true;
-					progressBar.Visible = false;
+					if (rbtnEnglish.Checked)
+					{
+						rtxtDisplay.Text = "Finished.\n\n";
+						rtxtDisplay.Text += "Total: " + numberOfEquations + "\n";
+						rtxtDisplay.Text += "Quantity of additions: " + numberOfAdditions + "\n";
+						rtxtDisplay.Text += "Quantity of subtractions: " + numberOfSubtractions + "\n";
+						rtxtDisplay.Text += "Quantity of multiplications: " + numberOfMultiplications + "\n";
+						rtxtDisplay.Text += "Quantity of divisions: " + numberOfDivisions + "\n";
+					}
+					if (rbtnVietnamese.Checked)
+					{
+						rtxtDisplay.Text = "Hoàn tất.\n\n";
+						rtxtDisplay.Text += "Tổng cộng: " + numberOfEquations + "\n";
+						rtxtDisplay.Text += "Phép cộng: " + numberOfAdditions + "\n";
+						rtxtDisplay.Text += "Phép trừ: " + numberOfSubtractions + "\n";
+						rtxtDisplay.Text += "Phép nhân: " + numberOfMultiplications + "\n";
+						rtxtDisplay.Text += "Phép chia: " + numberOfDivisions + "\n";
+					}
+
+					try
+					{
+						FileIO.OpenWordDocument();
+					}
+					catch (Exception ex)
+					{
+						rtxtDisplay.Text = "Error in opening Word Document: " + ex.Message;
+					}
 				}
 			}
+			grbLanguages.Enabled = true;
+			grbPreferences.Enabled = true;
+			btnRun.Enabled = true;
+			btnClose.Enabled = true;
+			progressBar.Visible = false;
 		}
 		private void rbtnVietnamese_CheckedChanged(object sender, EventArgs e)
 		{
@@ -206,6 +309,9 @@ namespace MathCreator_WindowsForm
 
 			rtxtDisplay.Text += "\n\nAll equations will be in a Microsoft Word Document File";
 			rtxtDisplay.Text += "\nCác phép toán sẽ được lưu trong file Word";
+
+			rtxtDisplay.Text += "\n\nThe Word document is in your Desktop folder";
+			rtxtDisplay.Text += "\nFile Word sẽ được lưu trên Desktop (màn hình chính)";
 			try
 			{
 				FileIO.CheckFile();
@@ -227,7 +333,35 @@ namespace MathCreator_WindowsForm
 				btnClose.Enabled = true;
 				progressBar.Value = 0;
 			}
+		}
 
+		/// <summary>
+		/// Accepts two unsign integer (uint), return the greatest common divisor (GCD)
+		/// </summary>
+		/// <param name="a">First number</param>
+		/// <param name="b">Second number</param>
+		/// <returns></returns>
+		private uint GetGCD(uint a, uint b)
+		{
+			uint temporary = 0;
+			while (a != 0 && b != 0)
+			{
+				if (a < b)
+				{
+					temporary = a;
+					a = b;
+					b = temporary;
+				}
+				a = a % b;
+			}
+			if (a == 0)
+			{
+				return b;
+			}
+			else
+			{
+				return a;
+			}
 		}
 	}
 }

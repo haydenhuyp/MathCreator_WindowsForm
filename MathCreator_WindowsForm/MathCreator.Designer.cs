@@ -127,7 +127,8 @@ namespace MathCreator_WindowsForm
 			// 
 			// btnRun
 			// 
-			this.btnRun.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnRun.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnRun.ForeColor = System.Drawing.Color.Green;
 			this.btnRun.Location = new System.Drawing.Point(496, 127);
 			this.btnRun.Name = "btnRun";
 			this.btnRun.Size = new System.Drawing.Size(116, 47);
@@ -138,7 +139,7 @@ namespace MathCreator_WindowsForm
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnCancel.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnCancel.Location = new System.Drawing.Point(496, 206);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(116, 47);
@@ -149,7 +150,8 @@ namespace MathCreator_WindowsForm
 			// 
 			// btnClose
 			// 
-			this.btnClose.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnClose.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnClose.ForeColor = System.Drawing.Color.Red;
 			this.btnClose.Location = new System.Drawing.Point(496, 285);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(116, 47);
@@ -183,10 +185,11 @@ namespace MathCreator_WindowsForm
 			// rbtnVietnamese
 			// 
 			this.rbtnVietnamese.AutoSize = true;
-			this.rbtnVietnamese.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rbtnVietnamese.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rbtnVietnamese.ForeColor = System.Drawing.Color.Red;
 			this.rbtnVietnamese.Location = new System.Drawing.Point(178, 41);
 			this.rbtnVietnamese.Name = "rbtnVietnamese";
-			this.rbtnVietnamese.Size = new System.Drawing.Size(122, 29);
+			this.rbtnVietnamese.Size = new System.Drawing.Size(132, 29);
 			this.rbtnVietnamese.TabIndex = 2;
 			this.rbtnVietnamese.Text = "Tiếng Việt";
 			this.rbtnVietnamese.UseVisualStyleBackColor = true;
@@ -196,10 +199,10 @@ namespace MathCreator_WindowsForm
 			// 
 			this.rbtnEnglish.AutoSize = true;
 			this.rbtnEnglish.Checked = true;
-			this.rbtnEnglish.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rbtnEnglish.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rbtnEnglish.Location = new System.Drawing.Point(16, 41);
 			this.rbtnEnglish.Name = "rbtnEnglish";
-			this.rbtnEnglish.Size = new System.Drawing.Size(97, 29);
+			this.rbtnEnglish.Size = new System.Drawing.Size(104, 29);
 			this.rbtnEnglish.TabIndex = 1;
 			this.rbtnEnglish.TabStop = true;
 			this.rbtnEnglish.Text = "English";
@@ -208,10 +211,10 @@ namespace MathCreator_WindowsForm
 			// lblAuthor
 			// 
 			this.lblAuthor.AutoSize = true;
-			this.lblAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblAuthor.Location = new System.Drawing.Point(27, 388);
 			this.lblAuthor.Name = "lblAuthor";
-			this.lblAuthor.Size = new System.Drawing.Size(251, 24);
+			this.lblAuthor.Size = new System.Drawing.Size(277, 24);
 			this.lblAuthor.TabIndex = 6;
 			this.lblAuthor.Text = "Created by Huy Pham(2021).";
 			// 
@@ -219,7 +222,7 @@ namespace MathCreator_WindowsForm
 			// 
 			this.llblGitHub.AutoSize = true;
 			this.llblGitHub.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.llblGitHub.Location = new System.Drawing.Point(282, 388);
+			this.llblGitHub.Location = new System.Drawing.Point(327, 388);
 			this.llblGitHub.Name = "llblGitHub";
 			this.llblGitHub.Size = new System.Drawing.Size(68, 24);
 			this.llblGitHub.TabIndex = 7;
