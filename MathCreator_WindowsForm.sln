@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathCreator_WindowsForm", "MathCreator_WindowsForm\MathCreator_WindowsForm.csproj", "{9E89F5D1-DF3D-4BC0-8088-FCE5063FD6BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E89F5D1-DF3D-4BC0-8088-FCE5063FD6BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E89F5D1-DF3D-4BC0-8088-FCE5063FD6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E89F5D1-DF3D-4BC0-8088-FCE5063FD6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E89F5D1-DF3D-4BC0-8088-FCE5063FD6BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {880576E7-1469-4C98-BF8D-20F8E5C456B9}
+	EndGlobalSection
+EndGlobal
