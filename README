@@ -1,0 +1,7 @@
+- MATHCREATOR -
+
+This program will generate randomized math questions (in form of equations) with 4 math operation (addition, subtraction, multiplication, division).
+It is build with Windows Form (.NET Framework)
+
+This is the source code of the program.
+To run it, you can clone & run in debug mode in Visual Studio.
